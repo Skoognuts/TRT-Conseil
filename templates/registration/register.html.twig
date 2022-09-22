@@ -9,7 +9,11 @@
             <img class="small-logo mb-2" src="{{ asset('images/logo.png') }}" alt="Logo">
             <h2 class="mb-3 font-weight-normal">S'ENREGISTRER</h2>
             {{ form_start(registrationForm) }}
-                <label for="inputEmail">E-mail</label>
+                <label for="inputUserType">Vous êtes</label>
+                {{ form_row(registrationForm.userType, {
+                    id: 'inputUserType'
+                }) }}
+                <label class="mt-2" for="inputEmail">E-mail</label>
                 {{ form_row(registrationForm.email, {
                     id: 'inputEmail'
                 }) }}
