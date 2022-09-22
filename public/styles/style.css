@@ -42,4 +42,8 @@ h1 {
 #inputEmail,
 #inputPassword {
   width: 300px;
+  padding-block: 6px !important;
+  padding-inline: 12px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem !important;
 }/*# sourceMappingURL=style.css.map */
