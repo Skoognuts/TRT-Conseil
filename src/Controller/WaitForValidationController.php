@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WaitForValidationController extends AbstractController
 {
-    #[Route('/wait/for/validation', name: 'app_wait_for_validation')]
+    #[Route('/wait_for_validation', name: 'app_wait_for_validation')]
     public function index(): Response
     {
         return $this->render('wait_for_validation/index.html.twig', [

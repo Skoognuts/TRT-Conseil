@@ -9,12 +9,12 @@
             <img class="small-logo mb-2" src="{{ asset('images/logo.png') }}" alt="Logo">
             <form method="post">
                 {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    <div class="mt-3 alert alert-danger">Veuillez vérifier vos identifiants</div>
                 {% endif %}
 
                 {% if app.user %}
-                    <div class="mb-3">
-                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}. <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    <div class="mt-3 alert alert-success">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}<br><a href="{{ path('app_logout') }}">Se déconnecter</a>
                     </div>
                 {% endif %}
 

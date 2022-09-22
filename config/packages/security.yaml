@@ -38,6 +38,7 @@ security:
         ROLE_ADMINISTRATOR: ROLE_UNAUTHORIZED
 
     access_control:
+        - { path: ^/wait_for_validation, roles: ROLE_UNAUTHORIZED }
         - { path: ^/admin, roles: ROLE_ADMINISTRATOR }
         - { path: ^/consultant, roles: ROLE_CONSULTANT }
         - { path: ^/recruiter, roles: ROLE_RECRUITER }
