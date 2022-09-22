@@ -30,6 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isApproved = null;
 
+    #[ORM\Column]
+    private ?int $userType = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,6 +58,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsApproved(bool $isApproved): self
     {
         $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    public function getUserType(): ?int
+    {
+        return $this->userType;
+    }
+
+    public function setUserType(int $userType): self
+    {
+        $this->userType = $userType;
 
         return $this;
     }

@@ -21,10 +21,9 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('userType', ChoiceType::class, [
                 'label' => false,
-                'mapped' => false,
                 'choices' => [
-                    'Candidat' => 'candidate',
-                    'Recruteur' => 'recruiter'
+                    'Candidat' => 4,
+                    'Recruteur' => 3
                 ]
             ])
             ->add('email', EmailType::class, [
