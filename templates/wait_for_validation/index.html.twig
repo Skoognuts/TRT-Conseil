@@ -1,20 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WaitForValidationController!{% endblock %}
+{% block title %}EN ATTENTE DE VALIDATION :: TRT Conseil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="w-100">
+        <div class="middle-window position-absolute top-50 start-50 p-4 text-center translate-middle">
+            <img class="small-logo mb-2" src="{{ asset('images/logo.png') }}" alt="Logo">
+            <h2 class="mb-3 font-weight-normal">MERCI POUR VOTRE INSCRIPTION</h2>
+            <p class="mb-3"><b>{{ app.user.email }}</b></p>
+            <div class="d-flex flex-row justify-content-center w-100 mb-3">
+                <p class="alert alert-success">Votre inscription va faire l'objet d'une vérification auprès de nos consultants. Veuillez patienter...</p>
+            </div>
+            <a class="btn btn-primary button-shadow" href="{{ path('app_logout') }}" role="button">Se déconnecter</a>
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/skoog/Desktop/Exercices/trt_conseil/src/Controller/WaitForValidationController.php'|file_link(0) }}">src/Controller/WaitForValidationController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/skoog/Desktop/Exercices/trt_conseil/templates/wait_for_validation/index.html.twig'|file_link(0) }}">templates/wait_for_validation/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}
