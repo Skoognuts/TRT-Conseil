@@ -6,4 +6,38 @@
 
     {{ include('parts/_header.html.twig') }}
 
+    <div class="large-center-wrapper mb-5">
+        <div class="page-title-wrapper">
+            <h2>RECRUTEUR</h2>
+        </div>
+
+        <div class="inner-center-wrapper">
+            {% if (recruitCompany == '') %}
+                <div class="advisory">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-3 d-flex flew-column justify-content-center align-items-center">
+                                <img class="logo" src="{{ asset('images/advisory.png') }}" alt="Advisory">
+                            </div>
+                            <div class="col-9">
+                                <h3>Vous n'avez pas encore complété votre profil !</h3>
+                                {{ form_start(recruiterCreationForm) }}
+                                    {{ form_row(recruiterCreationForm.company, {
+                                        id: 'inputCompanyMax'
+                                    }) }}
+                                    {{ form_row(recruiterCreationForm.address, {
+                                        id: 'inputAddressMax'
+                                    }) }}
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <button type="submit" class="btn btn-primary button-shadow me-2 mt-4 ps-5 pe-5">Valider</button>
+                                    </div>
+                                {{ form_end(recruiterCreationForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock %}

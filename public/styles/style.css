@@ -133,7 +133,9 @@ header {
 
 #inputFirstNameMax,
 #inputLastNameMax,
-#inputCVMax {
+#inputCVMax,
+#inputCompanyMax,
+#inputAddressMax {
   width: 100%;
   margin-bottom: 15px;
   padding-block: 6px !important;
