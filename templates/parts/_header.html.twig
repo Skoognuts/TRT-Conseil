@@ -12,10 +12,18 @@
         <p class="mb-0"><b>{{ consultFirstName }} {{ consultLastName }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
       {% endif %}
       {% if is_granted('ROLE_RECRUITER') %}
-        <p class="mb-0"><b>{{ recruitCompany }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% if recruitCompany != '' %}
+          <p class="mb-0"><b>{{ recruitCompany }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% else %}
+          <p class="mb-0"><b>{{ recruitEmail }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% endif %}
       {% endif %}
       {% if is_granted('ROLE_CANDIDATE') %}
-        <p class="mb-0"><b>{{ candidateFirstName }} {{ candidateLastName }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% if (candidateFirstName != '') and (candidateLastName != '') %}
+          <p class="mb-0"><b>{{ candidateFirstName }} {{ candidateLastName }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% else %}
+          <p class="mb-0"><b>{{ candidateEmail }}</b> connecté 🟢&ensp;<a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+        {% endif %}
       {% endif %}
     </div>
   </div>
