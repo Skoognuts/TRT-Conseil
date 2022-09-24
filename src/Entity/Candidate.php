@@ -23,6 +23,9 @@ class Candidate
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $cv = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Candidate
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(string $cv): self
+    {
+        $this->cv = $cv;
 
         return $this;
     }

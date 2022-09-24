@@ -93,6 +93,14 @@ header {
   max-width: 300px;
 }
 
+.advisory {
+  width: 100%;
+  padding: 15px;
+  background: #f8d7da;
+  border-radius: 10px;
+  border: 1px solid #f5c6cb;
+}
+
 .table-wrapper {
   width: 100%;
   border-radius: 10px;
@@ -117,6 +125,17 @@ header {
 #inputFirstName,
 #inputLastName {
   width: 300px;
+  padding-block: 6px !important;
+  padding-inline: 12px !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem !important;
+}
+
+#inputFirstNameMax,
+#inputLastNameMax,
+#inputCVMax {
+  width: 100%;
+  margin-bottom: 15px;
   padding-block: 6px !important;
   padding-inline: 12px !important;
   border: 1px solid #ced4da !important;
