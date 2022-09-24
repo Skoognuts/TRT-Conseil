@@ -6,8 +6,8 @@ body {
 }
 
 body {
-  min-height: 100vh;
   background: linear-gradient(#2a9df4, #d0efff);
+  background-attachment: fixed;
 }
 
 h1 {
@@ -101,6 +101,10 @@ header {
 
 .left-separator {
   border-left: 1px solid #000000;
+}
+
+.bottom-separator {
+  border-bottom: 1px solid #000000;
 }
 
 .button-shadow {
