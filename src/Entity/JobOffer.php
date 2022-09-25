@@ -17,7 +17,7 @@ class JobOffer
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recruiter $company = null;
 
@@ -49,7 +49,7 @@ class JobOffer
         return $this->company;
     }
 
-    public function setCompany(Recruiter $company): self
+    public function setCompany(?Recruiter $company): self
     {
         $this->company = $company;
 

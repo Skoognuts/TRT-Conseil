@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecruiterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecruiterRepository::class)]
@@ -22,6 +24,14 @@ class Recruiter
 
     #[ORM\Column(length: 255)]
     private ?string $address = null;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: JobOffer::class, orphanRemoval: true)]
+    private Collection $jobOffers;
+
+    public function __construct()
+    {
+        $this->jobOffers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +70,36 @@ class Recruiter
     public function setAddress(string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobOffer>
+     */
+    public function getJobOffers(): Collection
+    {
+        return $this->jobOffers;
+    }
+
+    public function addJobOffer(JobOffer $jobOffer): self
+    {
+        if (!$this->jobOffers->contains($jobOffer)) {
+            $this->jobOffers->add($jobOffer);
+            $jobOffer->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobOffer(JobOffer $jobOffer): self
+    {
+        if ($this->jobOffers->removeElement($jobOffer)) {
+            // set the owning side to null (unless already changed)
+            if ($jobOffer->getCompany() === $this) {
+                $jobOffer->setCompany(null);
+            }
+        }
 
         return $this;
     }
