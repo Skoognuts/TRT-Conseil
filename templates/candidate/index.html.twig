@@ -52,7 +52,7 @@
                                     <li><b>Prénom : </b>{{ candidateFirstName }}</li>
                                     <li><b>Nom : </b>{{ candidateLastName }}</li>
                                     <li><b>Adresse E-mail : </b>{{ candidateEmail }}</li>
-                                    <li><b>C.V. : </b><a href="{{ candidateCV }}">Voir le C.V.</a></li>
+                                    <li><b>C.V. : </b><a href="{{ asset('uploads/cv/' ~ candidateCV) }}">Voir le C.V.</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -8,14 +8,17 @@ use App\Repository\CandidateRepository;
 use App\Form\CandidateCreationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CandidateController extends AbstractController
 {
     #[Route('/candidate', name: 'app_candidate')]
-    public function index(CandidateRepository $candidateRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function index(CandidateRepository $candidateRepository, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $currentUser = $this->getUser();
 
@@ -23,6 +26,7 @@ class CandidateController extends AbstractController
         $candidateFirstName = '';
         $candidateLastName = '';
         $candidateCV = '';
+        $fileError = '';
         $candidates = $candidateRepository->findAll();
 
         foreach ($candidates as $candidate) {
@@ -41,7 +45,21 @@ class CandidateController extends AbstractController
             $newCandidate->setUser($currentUser);
             $newCandidate->setFirstName($form->get('firstName')->getData());
             $newCandidate->setLastName($form->get('lastName')->getData());
-            $newCandidate->setCv($form->get('cv')->getData());
+
+            $cv = $form->get('cv')->getData();
+            $originalFilename = pathinfo($cv->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$cv->guessExtension();
+            try {
+                $cv->move(
+                    $this->getParameter('cv_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                $fileError = $e;
+            }
+
+            $newCandidate->setCv($newFilename);
 
             $entityManager->persist($newCandidate);
             $entityManager->flush();
@@ -54,6 +72,7 @@ class CandidateController extends AbstractController
             'candidateFirstName' => $candidateFirstName,
             'candidateLastName' => $candidateLastName,
             'candidateCV' => $candidateCV,
+            'fileError' => $fileError,
             'candidateCreationForm' => $form->createView()
         ]);
     }
