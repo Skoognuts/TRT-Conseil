@@ -3,17 +3,20 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\JobOffer;
 use App\Repository\ConsultantRepository;
 use App\Repository\UserRepository;
+use App\Repository\JobOfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConsultantController extends AbstractController
 {
     #[Route('/consultant', name: 'app_consultant')]
-    public function index(ConsultantRepository $consultantRepository, UserRepository $userRepository): Response
+    public function index(ConsultantRepository $consultantRepository, UserRepository $userRepository, JobOfferRepository $jobOfferRepository): Response
     {
         $currentUser = $this->getUser();
 
@@ -44,8 +47,14 @@ class ConsultantController extends AbstractController
             }
         }
 
-        // Annonces à approuver
+        $jobOffers = $jobOfferRepository->findAll();
         $jobOffersToApprove = [];
+
+        foreach ($jobOffers as $jobOffer) {
+            if ($jobOffer->isIsApproved() == false) {
+                array_push($jobOffersToApprove, $jobOffer);
+            }
+        }
 
         // Candidatures à approuver
         $jobApplicationsToApprove = [];
@@ -105,6 +114,77 @@ class ConsultantController extends AbstractController
 
         return $this->render('consultant/grant_recruiter.html.twig', [
             'recruiter' => $user,
+            'consultFirstName' => $consultFirstName,
+            'consultLastName' => $consultLastName
+        ]);
+    }
+
+    #[Route('consultant-deny-user-{id}', name: 'app_consultant_deny_user', methods: ['GET', 'POST'])]
+    public function deny_user(ConsultantRepository $consultantRepository, User $user, UserRepository $userRepository): Response
+    {
+        $currentUser = $this->getUser();
+
+        $consultants = $consultantRepository->findAll();
+
+        foreach ($consultants as $consultant) {
+            if ($currentUser->getId() == $consultant->getUser()->getId()) {
+                $consultFirstName = $consultant->getFirstName();
+                $consultLastName = $consultant->getLastName();
+            }
+        }
+
+        $userRepository->remove($user, true);
+
+        return $this->render('consultant/deny_user.html.twig', [
+            'user' => $user,
+            'consultFirstName' => $consultFirstName,
+            'consultLastName' => $consultLastName
+        ]);
+    }
+
+    #[Route('/consultant-grant-job-offer-{id}', name: 'app_consultant_grant_job_offer', methods: ['GET', 'POST'])]
+    public function grant_job_offer(ConsultantRepository $consultantRepository, JobOffer $jobOffer, EntityManagerInterface $entityManager): Response
+    {
+        $currentUser = $this->getUser();
+
+        $consultants = $consultantRepository->findAll();
+
+        foreach ($consultants as $consultant) {
+            if ($currentUser->getId() == $consultant->getUser()->getId()) {
+                $consultFirstName = $consultant->getFirstName();
+                $consultLastName = $consultant->getLastName();
+            }
+        }
+
+        $jobOffer->setIsApproved(true);
+        $entityManager->persist($jobOffer);
+        $entityManager->flush();
+
+        return $this->render('consultant/grant_job_offer.html.twig', [
+            'jobOffer' => $jobOffer,
+            'consultFirstName' => $consultFirstName,
+            'consultLastName' => $consultLastName
+        ]);
+    }
+
+    #[Route('consultant-deny-job-offer-{id}', name: 'app_consultant_deny_job_offer', methods: ['GET', 'POST'])]
+    public function deny_job_offer(ConsultantRepository $consultantRepository, JobOffer $jobOffer, JobOfferRepository $jobOfferRepository): Response
+    {
+        $currentUser = $this->getUser();
+
+        $consultants = $consultantRepository->findAll();
+
+        foreach ($consultants as $consultant) {
+            if ($currentUser->getId() == $consultant->getUser()->getId()) {
+                $consultFirstName = $consultant->getFirstName();
+                $consultLastName = $consultant->getLastName();
+            }
+        }
+
+        $jobOfferRepository->remove($jobOffer, true);
+
+        return $this->render('consultant/deny_job_offer.html.twig', [
+            'jobOffer' => $jobOffer,
             'consultFirstName' => $consultFirstName,
             'consultLastName' => $consultLastName
         ]);

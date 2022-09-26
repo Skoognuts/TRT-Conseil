@@ -29,8 +29,10 @@
                         <tbody>
                             {% for unauthorizedCandidate in unauthorizedCandidates %}
                                 <tr>
-                                    <td>🔴 {{ unauthorizedCandidate.email }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_candidate', {'id': unauthorizedCandidate.id}) }}" role="button">Approuver</a></td>
+                                    <td>🟡 {{ unauthorizedCandidate.email }}</td>
+                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_candidate', {'id': unauthorizedCandidate.id}) }}" role="button">Approuver</a>
+                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedCandidate.id}) }}" role="button">Supprimer</a>
+                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>
@@ -58,8 +60,10 @@
                         <tbody>
                             {% for unauthorizedRecruiter in unauthorizedRecruiters %}
                                 <tr>
-                                    <td>🔴 {{ unauthorizedRecruiter.email }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_recruiter', {'id': unauthorizedRecruiter.id}) }}" role="button">Approuver</a></td>
+                                    <td>🟡 {{ unauthorizedRecruiter.email }}</td>
+                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_recruiter', {'id': unauthorizedRecruiter.id}) }}" role="button">Approuver</a>
+                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedRecruiter.id}) }}" role="button">Supprimer</a>
+                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>
@@ -79,6 +83,12 @@
                                 <th>
                                     Titre
                                 </th>
+                                <th>
+                                    Entreprise
+                                </th>
+                                <th>
+                                    Description
+                                </th>
                                 <th class="text-end">
                                     Action
                                 </th>
@@ -87,12 +97,16 @@
                         <tbody>
                             {% for jobOfferToApprove in jobOffersToApprove %}
                                 <tr>
-                                    <td>🔴 {{ jobOfferToApprove.title }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="#" role="button">Approuver</a></td>
+                                    <td>🟡 {{ jobOfferToApprove.title }}</td>
+                                    <td>{{ jobOfferToApprove.company.company }}</td>
+                                    <td>{{ jobOfferToApprove.description }}</td>
+                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Approuver</a>
+                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Supprimer</a>
+                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="2">✅ Aucune nouvelle annonce</td>
+                                    <td colspan="4">✅ Aucune nouvelle annonce</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -119,7 +133,7 @@
                         <tbody>
                             {% for jobApplicationToApprove in jobApplicationsToApprove %}
                                 <tr>
-                                    <td>🔴 {{ jobApplicationToApprove.jobOffer }}</td>
+                                    <td>🟡 {{ jobApplicationToApprove.jobOffer }}</td>
                                     <td>{{ jobApplicationToApprove.candidate.firstName }} {{ jobApplicationToApprove.candidate.lastName }}</td>
                                     <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="#" role="button">Approuver</a></td>
                                 </tr>
