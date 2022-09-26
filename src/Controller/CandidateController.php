@@ -22,12 +22,14 @@ class CandidateController extends AbstractController
         $candidateEmail = $currentUser->getEmail();
         $candidateFirstName = '';
         $candidateLastName = '';
+        $candidateCV = '';
         $candidates = $candidateRepository->findAll();
 
         foreach ($candidates as $candidate) {
             if ($currentUser->getId() == $candidate->getUser()->getId()) {
                 $candidateFirstName = $candidate->getFirstName();
                 $candidateLastName = $candidate->getLastName();
+                $candidateCV = $candidate->getCv();
             }
         }
 
@@ -51,6 +53,7 @@ class CandidateController extends AbstractController
             'candidateEmail' => $candidateEmail,
             'candidateFirstName' => $candidateFirstName,
             'candidateLastName' => $candidateLastName,
+            'candidateCV' => $candidateCV,
             'candidateCreationForm' => $form->createView()
         ]);
     }
