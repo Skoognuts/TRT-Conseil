@@ -82,10 +82,16 @@ header {
   filter: drop-shadow(0 0 10px #000000);
 }
 
+.medium-logo {
+  height: 10rem;
+  width: auto;
+  filter: drop-shadow(0 0 7px #000000);
+}
+
 .small-logo {
   height: 7rem;
   width: auto;
-  filter: drop-shadow(0 0 10px #000000);
+  filter: drop-shadow(0 0 5px #000000);
 }
 
 .alert {
@@ -99,6 +105,14 @@ header {
   background: #f8d7da;
   border-radius: 10px;
   border: 1px solid #f5c6cb;
+}
+
+.advisory-success {
+  width: 100%;
+  padding: 15px;
+  background: #d1e7dd;
+  border-radius: 10px;
+  border: 1px solid #beddd1;
 }
 
 .table-wrapper {

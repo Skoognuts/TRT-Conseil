@@ -21,11 +21,13 @@ class RecruiterController extends AbstractController
 
         $recruitEmail = $currentUser->getEmail();
         $recruitCompany = '';
+        $recruitAddress = '';
         $recruiters = $recruiterRepository->findAll();
 
         foreach ($recruiters as $recruiter) {
             if ($currentUser->getId() == $recruiter->getUser()->getId()) {
                 $recruitCompany = $recruiter->getCompany();
+                $recruitAddress = $recruiter->getAddress();
             }
         }
 
@@ -47,6 +49,7 @@ class RecruiterController extends AbstractController
         return $this->render('recruiter/index.html.twig', [
             'recruitEmail' => $recruitEmail,
             'recruitCompany' => $recruitCompany,
+            'recruitAddress' => $recruitAddress,
             'recruiterCreationForm' => $form->createView()
         ]);
     }

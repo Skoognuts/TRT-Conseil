@@ -16,7 +16,7 @@
                 <div class="advisory">
                     <div class="container">
                         <div class="row">
-                            <div class="col-3 d-flex flew-column justify-content-center align-items-center">
+                            <div class="col-3 d-flex flex-column justify-content-center align-items-center">
                                 <img class="logo" src="{{ asset('images/advisory.png') }}" alt="Advisory">
                             </div>
                             <div class="col-9">
@@ -32,6 +32,24 @@
                                         <button type="submit" class="btn btn-primary button-shadow me-2 mt-4 ps-5 pe-5">Valider</button>
                                     </div>
                                 {{ form_end(recruiterCreationForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="advisory-success">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-3 d-flex flex-column justify-content-center align-items-center">
+                                <img class="medium-logo" src="{{ asset('images/recruiter.png') }}" alt="Advisory">
+                            </div>
+                            <div class="col-9 d-flex flex-column justify-content-center">
+                                <h3>Entreprise {{ recruitCompany }} :</h3>
+                                <ul>
+                                    <li><b>Nom de l'entreprise : </b>{{ recruitCompany }}</li>
+                                    <li><b>Adresse E-mail : </b>{{ recruitEmail }}</li>
+                                    <li><b>Adresse postale : </b>{{ recruitAddress }}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
