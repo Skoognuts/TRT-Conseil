@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Recruiter;
+use App\Entity\JobOffer;
 use App\Repository\RecruiterRepository;
+use App\Repository\JobOfferRepository;
 use App\Form\RecruiterCreationFormType;
+use App\Form\JobOfferCreationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,19 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecruiterController extends AbstractController
 {
     #[Route('/recruiter', name: 'app_recruiter')]
-    public function index(RecruiterRepository $recruiterRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function index(RecruiterRepository $recruiterRepository, JobOfferRepository $jobOfferRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
 
         $recruitEmail = $currentUser->getEmail();
         $recruitCompany = '';
         $recruitAddress = '';
+        $recruitJobOffers = [];
         $recruiters = $recruiterRepository->findAll();
 
         foreach ($recruiters as $recruiter) {
             if ($currentUser->getId() == $recruiter->getUser()->getId()) {
+                $currentRecruiter = $recruiter;
                 $recruitCompany = $recruiter->getCompany();
                 $recruitAddress = $recruiter->getAddress();
+                $recruitJobOffers = $recruiter->getJobOffers();
             }
         }
 
@@ -46,11 +52,31 @@ class RecruiterController extends AbstractController
             return $this->redirectToRoute('app_recruiter_created', [], Response::HTTP_SEE_OTHER);
         }
 
+        $newJobOffer = new JobOffer();
+        $jobForm = $this->createForm(JobOfferCreationFormType::class, $newJobOffer);
+        $jobForm->handleRequest($request);
+
+        if ($jobForm->isSubmitted() && $jobForm->isValid()) {
+            $newJobOffer->setTitle($jobForm->get('title')->getData());
+            $newJobOffer->setDescription($jobForm->get('description')->getData());
+            $newJobOffer->setIsApproved(false);
+            $newJobOffer->setCompany($currentRecruiter);
+
+            $entityManager->persist($newJobOffer);
+            $entityManager->flush();
+
+            $newJobOfferId = $newJobOffer->getId();
+
+            return $this->redirectToRoute('app_job_offer_created', ['id' => $newJobOfferId], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('recruiter/index.html.twig', [
             'recruitEmail' => $recruitEmail,
             'recruitCompany' => $recruitCompany,
             'recruitAddress' => $recruitAddress,
-            'recruiterCreationForm' => $form->createView()
+            'recruitJobOffers' => $recruitJobOffers,
+            'recruiterCreationForm' => $form->createView(),
+            'jobOfferCreationForm' => $jobForm->createView()
         ]);
     }
 
@@ -69,6 +95,29 @@ class RecruiterController extends AbstractController
         }
 
         return $this->render('recruiter/recruiter_created.html.twig', [
+            'recruitCompany' => $recruitCompany,
+            'recruitAddress' => $recruitAddress
+        ]);
+    }
+
+    #[Route('recruiter/job_offer_created-{id}', name: 'app_job_offer_created')]
+    public function jobOfferCreated(JobOfferRepository $jobOfferRepository, RecruiterRepository $recruiterRepository, int $id): Response
+    {
+        $currentUser = $this->getUser();
+
+        $recruiters = $recruiterRepository->findAll();
+
+        foreach ($recruiters as $recruiter) {
+            if ($currentUser->getId() == $recruiter->getUser()->getId()) {
+                $recruitCompany = $recruiter->getCompany();
+                $recruitAddress = $recruiter->getAddress();
+            }
+        }
+
+        $jobOffer = $jobOfferRepository->findOneBy(array('id' => $id));
+
+        return $this->render('recruiter/job_offer_created.html.twig', [
+            'jobOffer' => $jobOffer,
             'recruitCompany' => $recruitCompany,
             'recruitAddress' => $recruitAddress
         ]);
