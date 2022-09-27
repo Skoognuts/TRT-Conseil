@@ -125,6 +125,9 @@
                                 <th>
                                     Candidat
                                 </th>
+                                <th>
+                                    C.V.
+                                </th>
                                 <th class="text-end">
                                     Action
                                 </th>
@@ -133,15 +136,16 @@
                         <tbody>
                             {% for jobApplicationToApprove in jobApplicationsToApprove %}
                                 <tr>
-                                    <td>🟡 {{ jobApplicationToApprove.jobOffer }}</td>
+                                    <td>🟡 {{ jobApplicationToApprove.jobOffer.title }}</td>
                                     <td>{{ jobApplicationToApprove.candidate.firstName }} {{ jobApplicationToApprove.candidate.lastName }}</td>
-                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="#" role="button">Approuver</a>
-                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="#" role="button">Supprimer</a>
+                                    <td><a href="{{ asset('uploads/cv/' ~ jobApplicationToApprove.candidate.cv) }}">📄 Voir le C.V.</a></td>
+                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="{{ path('app_consultant_grant_job_application', {'id': jobApplicationToApprove.id}) }}" role="button">Approuver</a>
+                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_job_application', {'id': jobApplicationToApprove.id}) }}" role="button">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="3">✅ Aucune nouvelle candidature</td>
+                                    <td colspan="4">✅ Aucune nouvelle candidature</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
