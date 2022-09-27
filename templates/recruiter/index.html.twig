@@ -79,7 +79,7 @@
                             {% if recruitCompany != '' %}
                                 {% for recruitJobOffer in recruitJobOffers %}
                                     <tr>
-                                        <td>{{ recruitJobOffer.title }}</td>
+                                        <td><b>{{ recruitJobOffer.title }}</b></td>
                                         <td>
                                             {% if recruitJobOffer.isApproved == false %}
                                                 🟡 En attente
@@ -91,7 +91,9 @@
                                             {% if recruitJobOffer.isApproved == false %}
                                                 Les candidatures pour ce poste n'ont pas été ouvertes par nos consultants.
                                             {% else %}
-                                                🟢 En ligne
+                                                
+                                                {# Tableau des candidatures validées #}
+
                                             {% endif %}
                                         </td>
                                         <td class="text-end"><a class="btn btn-sm btn-danger button-shadow ms-2" href="#" role="button">Supprimer</a></td>

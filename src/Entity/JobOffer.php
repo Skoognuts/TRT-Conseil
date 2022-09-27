@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JobOfferRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,14 @@ class JobOffer
 
     #[ORM\Column]
     private ?bool $isApproved = null;
+
+    #[ORM\OneToMany(mappedBy: 'jobOffer', targetEntity: JobApplication::class, orphanRemoval: true)]
+    private Collection $jobApplications;
+
+    public function __construct()
+    {
+        $this->jobApplications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +86,36 @@ class JobOffer
     public function setIsApproved(bool $isApproved): self
     {
         $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobApplication>
+     */
+    public function getJobApplications(): Collection
+    {
+        return $this->jobApplications;
+    }
+
+    public function addJobApplication(JobApplication $jobApplication): self
+    {
+        if (!$this->jobApplications->contains($jobApplication)) {
+            $this->jobApplications->add($jobApplication);
+            $jobApplication->setJobOffer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobApplication(JobApplication $jobApplication): self
+    {
+        if ($this->jobApplications->removeElement($jobApplication)) {
+            // set the owning side to null (unless already changed)
+            if ($jobApplication->getJobOffer() === $this) {
+                $jobApplication->setJobOffer(null);
+            }
+        }
 
         return $this;
     }

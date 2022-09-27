@@ -30,8 +30,8 @@
                             {% for unauthorizedCandidate in unauthorizedCandidates %}
                                 <tr>
                                     <td>🟡 {{ unauthorizedCandidate.email }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_candidate', {'id': unauthorizedCandidate.id}) }}" role="button">Approuver</a>
-                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedCandidate.id}) }}" role="button">Supprimer</a>
+                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="{{ path('app_consultant_grant_candidate', {'id': unauthorizedCandidate.id}) }}" role="button">Approuver</a>
+                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedCandidate.id}) }}" role="button">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
@@ -61,8 +61,8 @@
                             {% for unauthorizedRecruiter in unauthorizedRecruiters %}
                                 <tr>
                                     <td>🟡 {{ unauthorizedRecruiter.email }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_recruiter', {'id': unauthorizedRecruiter.id}) }}" role="button">Approuver</a>
-                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedRecruiter.id}) }}" role="button">Supprimer</a>
+                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="{{ path('app_consultant_grant_recruiter', {'id': unauthorizedRecruiter.id}) }}" role="button">Approuver</a>
+                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_user', {'id': unauthorizedRecruiter.id}) }}" role="button">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
@@ -98,10 +98,10 @@
                             {% for jobOfferToApprove in jobOffersToApprove %}
                                 <tr>
                                     <td>🟡 {{ jobOfferToApprove.title }}</td>
-                                    <td>{{ jobOfferToApprove.company.company }}</td>
+                                    <td><b>{{ jobOfferToApprove.company.company }}</b></td>
                                     <td>{{ jobOfferToApprove.description }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="{{ path('app_consultant_grant_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Approuver</a>
-                                                         <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Supprimer</a>
+                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="{{ path('app_consultant_grant_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Approuver</a>
+                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_consultant_deny_job_offer', {'id': jobOfferToApprove.id}) }}" role="button">Supprimer</a>
                                     </td>
                                 </tr>
                             {% else %}
@@ -135,7 +135,9 @@
                                 <tr>
                                     <td>🟡 {{ jobApplicationToApprove.jobOffer }}</td>
                                     <td>{{ jobApplicationToApprove.candidate.firstName }} {{ jobApplicationToApprove.candidate.lastName }}</td>
-                                    <td class="text-end"><a class="btn btn-sm btn-primary button-shadow ms-2" href="#" role="button">Approuver</a></td>
+                                    <td class="d-flex flex-row justify-content-end align-items-center"><a class="btn btn-sm btn-primary button-shadow me-1" href="#" role="button">Approuver</a>
+                                                                                                       <a class="btn btn-sm btn-danger button-shadow ms-2" href="#" role="button">Supprimer</a>
+                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>

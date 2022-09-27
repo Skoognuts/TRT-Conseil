@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Candidate;
+use App\Entity\JobApplication;
 use App\Repository\CandidateRepository;
+use App\Repository\JobOfferRepository;
+use App\Repository\JobApplicationRepository;
 use App\Form\CandidateCreationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +21,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class CandidateController extends AbstractController
 {
     #[Route('/candidate', name: 'app_candidate')]
-    public function index(CandidateRepository $candidateRepository, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function index(CandidateRepository $candidateRepository, JobOfferRepository $jobOfferRepository, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $currentUser = $this->getUser();
 
@@ -26,14 +29,18 @@ class CandidateController extends AbstractController
         $candidateFirstName = '';
         $candidateLastName = '';
         $candidateCV = '';
+        $candidateApplications = [];
         $fileError = '';
         $candidates = $candidateRepository->findAll();
+        $jobOffers = $jobOfferRepository->findBy(array('isApproved' => true));
 
         foreach ($candidates as $candidate) {
             if ($currentUser->getId() == $candidate->getUser()->getId()) {
                 $candidateFirstName = $candidate->getFirstName();
                 $candidateLastName = $candidate->getLastName();
                 $candidateCV = $candidate->getCv();
+                $candidateId = $candidate->getId();
+                $candidateApplications = $candidate->getJobApplications();
             }
         }
 
@@ -72,6 +79,9 @@ class CandidateController extends AbstractController
             'candidateFirstName' => $candidateFirstName,
             'candidateLastName' => $candidateLastName,
             'candidateCV' => $candidateCV,
+            'candidateId' => $candidateId,
+            'jobOffers' => $jobOffers,
+            'candidateApplications' => $candidateApplications,
             'fileError' => $fileError,
             'candidateCreationForm' => $form->createView()
         ]);
@@ -92,6 +102,63 @@ class CandidateController extends AbstractController
         }
 
         return $this->render('candidate/candidate_created.html.twig', [
+            'candidateFirstName' => $candidateFirstName,
+            'candidateLastName' => $candidateLastName
+        ]);
+    }
+
+    #[Route('/candidate/job_application_created-{candidateId}-{jobOfferId}', name: 'app_job_application_created')]
+    public function jobApplicationCreated(CandidateRepository $candidateRepository, JobOfferRepository $jobOfferRepository, EntityManagerInterface $entityManager, int $candidateId, int $jobOfferId): Response
+    {
+        $currentUser = $this->getUser();
+
+        $candidates = $candidateRepository->findAll();
+
+        foreach ($candidates as $candidate) {
+            if ($currentUser->getId() == $candidate->getUser()->getId()) {
+                $candidateFirstName = $candidate->getFirstName();
+                $candidateLastName = $candidate->getLastName();
+            }
+        }
+
+        $jobOffer = $jobOfferRepository->findOneBy(array('id' => $jobOfferId));
+
+        $jobApplication = new JobApplication();
+        $jobApplication->setCandidate($candidateRepository->findOneBy(array('id' => $candidateId)));
+        $jobApplication->setJobOffer($jobOffer);
+        $jobApplication->setIsApproved(false);
+
+        $entityManager->persist($jobApplication);
+        $entityManager->flush();
+
+        return $this->render('candidate/job_application_created.html.twig', [
+            'jobOffer' => $jobOffer,
+            'candidateFirstName' => $candidateFirstName,
+            'candidateLastName' => $candidateLastName
+        ]);
+    }
+
+    #[Route('/candidate/job_application_canceled-{id}', name: 'app_job_application_canceled', methods: ['GET', 'POST'])]
+    public function cancel_job_application(CandidateRepository $candidateRepository, JobApplicationRepository $jobApplicationRepository, int $id): Response
+    {
+        $currentUser = $this->getUser();
+
+        $candidates = $candidateRepository->findAll();
+
+        foreach ($candidates as $candidate) {
+            if ($currentUser->getId() == $candidate->getUser()->getId()) {
+                $candidateFirstName = $candidate->getFirstName();
+                $candidateLastName = $candidate->getLastName();
+            }
+        }
+
+        $jobApplication = $jobApplicationRepository->findOneBy(array('id' => $id));
+        $jobOffer = $jobApplication->getJobOffer();
+
+        $jobApplicationRepository->remove($jobApplication, true);
+
+        return $this->render('candidate/job_application_canceled.html.twig', [
+            'jobOffer' => $jobOffer,
             'candidateFirstName' => $candidateFirstName,
             'candidateLastName' => $candidateLastName
         ]);
