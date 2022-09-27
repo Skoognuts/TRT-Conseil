@@ -77,7 +77,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('/consultant-grant-candidate-{id}', name: 'app_consultant_grant_candidate', methods: ['GET', 'POST'])]
+    #[Route('/consultant/grant-candidate-{id}', name: 'app_consultant_grant_candidate', methods: ['GET', 'POST'])]
     public function grant_candidate(ConsultantRepository $consultantRepository, User $user, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -102,7 +102,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('/consultant-grant-recruiter-{id}', name: 'app_consultant_grant_recruiter', methods: ['GET', 'POST'])]
+    #[Route('/consultant/grant-recruiter-{id}', name: 'app_consultant_grant_recruiter', methods: ['GET', 'POST'])]
     public function grant_recruiter(ConsultantRepository $consultantRepository, User $user, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -127,7 +127,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('consultant-deny-user-{id}', name: 'app_consultant_deny_user', methods: ['GET', 'POST'])]
+    #[Route('/consultant/deny-user-{id}', name: 'app_consultant_deny_user', methods: ['GET', 'POST'])]
     public function deny_user(ConsultantRepository $consultantRepository, User $user, UserRepository $userRepository): Response
     {
         $currentUser = $this->getUser();
@@ -150,7 +150,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('/consultant-grant-job-offer-{id}', name: 'app_consultant_grant_job_offer', methods: ['GET', 'POST'])]
+    #[Route('/consultant/grant-job-offer-{id}', name: 'app_consultant_grant_job_offer', methods: ['GET', 'POST'])]
     public function grant_job_offer(ConsultantRepository $consultantRepository, JobOffer $jobOffer, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -175,7 +175,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('consultant-deny-job-offer-{id}', name: 'app_consultant_deny_job_offer', methods: ['GET', 'POST'])]
+    #[Route('/consultant/deny-job-offer-{id}', name: 'app_consultant_deny_job_offer', methods: ['GET', 'POST'])]
     public function deny_job_offer(ConsultantRepository $consultantRepository, JobOffer $jobOffer, JobOfferRepository $jobOfferRepository): Response
     {
         $currentUser = $this->getUser();
@@ -198,7 +198,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('/consultant-grant-job-application-{id}', name: 'app_consultant_grant_job_application', methods: ['GET', 'POST'])]
+    #[Route('/consultant/grant-job-application-{id}', name: 'app_consultant_grant_job_application', methods: ['GET', 'POST'])]
     public function grant_job_application(ConsultantRepository $consultantRepository, JobApplication $jobApplication, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
@@ -223,7 +223,7 @@ class ConsultantController extends AbstractController
         ]);
     }
 
-    #[Route('consultant-deny-job-application-{id}', name: 'app_consultant_deny_job_application', methods: ['GET', 'POST'])]
+    #[Route('/consultant/deny-job-application-{id}', name: 'app_consultant_deny_job_application', methods: ['GET', 'POST'])]
     public function deny_job_application(ConsultantRepository $consultantRepository, JobApplication $jobApplication, JobApplicationRepository $jobApplicationRepository): Response
     {
         $currentUser = $this->getUser();

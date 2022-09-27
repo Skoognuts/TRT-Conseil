@@ -91,12 +91,34 @@
                                             {% if recruitJobOffer.isApproved == false %}
                                                 Les candidatures pour ce poste n'ont pas été ouvertes par nos consultants.
                                             {% else %}
-                                                
-                                                {# Tableau des candidatures validées #}
-
+                                                {% if jobApplications is not null %}
+                                                    {% set hasJobApplications = false %}
+                                                    {% for jobApplication in jobApplications %}
+                                                        {% if jobApplication.jobOffer.id == recruitJobOffer.id and jobApplication.isApproved == true %}
+                                                            {% set hasJobApplications = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if hasJobApplications == true %}
+                                                        {% for jobApplication in jobApplications %}
+                                                            {% if jobApplication.jobOffer.id == recruitJobOffer.id and jobApplication.isApproved == true %}
+                                                                <table class="w-100">
+                                                                    <tr>
+                                                                        <td class="w-25">{{ jobApplication.candidate.firstName }} {{ jobApplication.candidate.lastName }}</td>
+                                                                        <td class="w-50"><a href="mailto:{{ jobApplication.candidate.user.email }}">{{ jobApplication.candidate.user.email }}</a></td>
+                                                                        <td class="w-25 text-end"><a href="{{ asset('uploads/cv/' ~ jobApplication.candidate.cv) }}">📄 Voir le C.V.</a></td>
+                                                                    </tr>
+                                                                </table>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        Vous n'avez encore aucune candidature pour ce poste.
+                                                    {% endif %}
+                                                {% else %}
+                                                    Vous n'avez encore aucune candidature pour ce poste.
+                                                {% endif %}
                                             {% endif %}
                                         </td>
-                                        <td class="text-end"><a class="btn btn-sm btn-danger button-shadow ms-2" href="#" role="button">Supprimer</a></td>
+                                        <td class="text-end"><a class="btn btn-sm btn-danger button-shadow ms-2" href="{{ path('app_cancel_job_offer', {'id': recruitJobOffer.id}) }}" role="button">Supprimer l'offre</a></td>
                                     </tr>
                                 {% else %}
                                     <tr>

@@ -7,6 +7,7 @@ use App\Entity\Recruiter;
 use App\Entity\JobOffer;
 use App\Repository\RecruiterRepository;
 use App\Repository\JobOfferRepository;
+use App\Repository\JobApplicationRepository;
 use App\Form\RecruiterCreationFormType;
 use App\Form\JobOfferCreationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RecruiterController extends AbstractController
 {
     #[Route('/recruiter', name: 'app_recruiter')]
-    public function index(RecruiterRepository $recruiterRepository, JobOfferRepository $jobOfferRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function index(RecruiterRepository $recruiterRepository, JobOfferRepository $jobOfferRepository, JobApplicationRepository $jobApplicationRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $currentUser = $this->getUser();
 
@@ -70,11 +71,14 @@ class RecruiterController extends AbstractController
             return $this->redirectToRoute('app_job_offer_created', ['id' => $newJobOfferId], Response::HTTP_SEE_OTHER);
         }
 
+        $jobApplications = $jobApplicationRepository->findAll();
+
         return $this->render('recruiter/index.html.twig', [
             'recruitEmail' => $recruitEmail,
             'recruitCompany' => $recruitCompany,
             'recruitAddress' => $recruitAddress,
             'recruitJobOffers' => $recruitJobOffers,
+            'jobApplications' => $jobApplications,
             'recruiterCreationForm' => $form->createView(),
             'jobOfferCreationForm' => $jobForm->createView()
         ]);
@@ -117,6 +121,29 @@ class RecruiterController extends AbstractController
         $jobOffer = $jobOfferRepository->findOneBy(array('id' => $id));
 
         return $this->render('recruiter/job_offer_created.html.twig', [
+            'jobOffer' => $jobOffer,
+            'recruitCompany' => $recruitCompany,
+            'recruitAddress' => $recruitAddress
+        ]);
+    }
+
+    #[Route('recruiter/cancel-job-offer-{id}', name: 'app_cancel_job_offer', methods: ['GET', 'POST'])]
+    public function cancel_job_offer(RecruiterRepository $recruiterRepository, JobOffer $jobOffer, JobOfferRepository $jobOfferRepository): Response
+    {
+        $currentUser = $this->getUser();
+
+        $recruiters = $recruiterRepository->findAll();
+
+        foreach ($recruiters as $recruiter) {
+            if ($currentUser->getId() == $recruiter->getUser()->getId()) {
+                $recruitCompany = $recruiter->getCompany();
+                $recruitAddress = $recruiter->getAddress();
+            }
+        }
+
+        $jobOfferRepository->remove($jobOffer, true);
+
+        return $this->render('recruiter/cancel_job_offer.html.twig', [
             'jobOffer' => $jobOffer,
             'recruitCompany' => $recruitCompany,
             'recruitAddress' => $recruitAddress
